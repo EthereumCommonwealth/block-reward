@@ -58,8 +58,9 @@ contract CallistoBlockReward is BlockReward {
 
         for (uint i = 0; i < beneficiaries.length; i++) {
             if (kind[i] == 0) { // author
+                uint256 finalReward = MINER_REWARD + (MINER_REWARD >> 5) * (beneficiaries.length - 1);
                 addresses[0] = beneficiaries[i];
-                rewards[0] = MINER_REWARD;
+                rewards[0] = finalReward;
 
             } else if (kind[i] >= 100) { // uncle
                 uint16 depth = kind[i] - 100;

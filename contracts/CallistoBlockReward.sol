@@ -24,9 +24,7 @@ interface BlockReward {
 }
 
 
-// Implements the Musicoin block reward as defined in
-// https://github.com/Musicoin/MCIPs/blob/master/MCIPS/mcip-3.md
-contract MusicoinBlockReward is BlockReward {
+contract CallistoBlockReward is BlockReward {
     address constant SYSTEM_ADDRESS = 0xffffFFFfFFffffffffffffffFfFFFfffFFFfFFfE;
 
     uint256 constant MINER_REWARD = 0x16c4abbebea0100000;

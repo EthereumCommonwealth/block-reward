@@ -54,24 +54,11 @@ contract CallistoBlockReward is BlockReward {
         address[] memory addresses = new address[](3); // minimum 3 for author, ubi contract and dev contract
         uint256[] memory rewards = new uint256[](3);
 
-        address stake_address = STAKE_ADDRESS;
-        uint256 stake_reward = STAKE_REWARD;
+        addresses[1] = getStakeAddress();
+        rewards[1] = getStakeReward();
 
-        address treasury_address = TREASURY_ADDRESS;
-        uint256 treasury_reward = TREASURY_REWARD;
-
-        // HF1 code
-        if (block.number >= HF1_BLOCK) {
-            stake_reward = STAKE_REWARD_HF1;
-            treasury_reward = TREASURY_REWARD_HF1;
-            stake_address = STAKE_ADDRESS_HF1;
-        }
-
-        addresses[1] = stake_address;
-        rewards[1] = stake_reward;
-
-        addresses[2] = treasury_address;
-        rewards[2] = treasury_reward;
+        addresses[2] = TREASURY_ADDRESS;
+        rewards[2] = getTreasuryReward();
 
         for (uint i = 0; i < beneficiaries.length; i++) {
             if (kind[i] == 0) { // author
@@ -115,5 +102,38 @@ contract CallistoBlockReward is BlockReward {
         }
         ret[ret.length - 1] = u;
         return ret;
+    }
+
+    function getStakeAddress()
+        internal
+        view
+        returns (address)
+    {
+        if (block.number >= HF1_BLOCK) {
+            return STAKE_ADDRESS_HF1;
+        }
+        return STAKE_ADDRESS;
+    }
+
+    function getTreasuryReward()
+        internal
+        view
+        returns (uint256)
+    {
+        if (block.number >= HF1_BLOCK) {
+            return TREASURY_REWARD_HF1;
+        }
+        return TREASURY_REWARD;
+    }
+
+    function getStakeReward()
+        internal
+        view
+        returns (uint256)
+    {
+        if (block.number >= HF1_BLOCK) {
+            return STAKE_REWARD_HF1;
+        }
+        return STAKE_REWARD;
     }
 }

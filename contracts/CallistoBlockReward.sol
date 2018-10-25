@@ -30,8 +30,12 @@ contract CallistoBlockReward is BlockReward {
     uint256 constant MINER_REWARD = 0x16c4abbebea0100000;
     uint256 constant STAKE_REWARD = 0x340aad21b3b700000;
     address constant STAKE_ADDRESS = 0x3c06f218Ce6dD8E2c535a8925A2eDF81674984D9;
+    address constant STAKE_ADDRESS_HF1 = 0xd813419749b3c2cdc94a2f9cfcf154113264a9d6;
     uint256 constant TREASURY_REWARD = 0x68155a43676e00000;
     address constant TREASURY_ADDRESS = 0x74682Fc32007aF0b6118F259cBe7bCCC21641600;
+    uint256 constant TREASURY_REWARD_HF1 = STAKE_REWARD;
+    uint256 constant STAKE_REWARD_HF1 = TREASURY_REWARD;
+    uint256 constant HF1_BLOCK = 0x155cc0;
 
     modifier onlySystem {
         require(msg.sender == SYSTEM_ADDRESS);
@@ -50,11 +54,24 @@ contract CallistoBlockReward is BlockReward {
         address[] memory addresses = new address[](3); // minimum 3 for author, ubi contract and dev contract
         uint256[] memory rewards = new uint256[](3);
 
-        addresses[1] = STAKE_ADDRESS;
-        rewards[1] = STAKE_REWARD;
+        address stake_address = STAKE_ADDRESS;
+        uint256 stake_reward = STAKE_REWARD;
 
-        addresses[2] = TREASURY_ADDRESS;
-        rewards[2] = TREASURY_REWARD;
+        address treasury_address = TREASURY_ADDRESS;
+        uint256 treasury_reward = TREASURY_REWARD;
+
+        // HF1 code
+        if (block.number >= HF1_BLOCK) {
+            stake_reward = STAKE_REWARD_HF1;
+            treasury_reward = TREASURY_REWARD_HF1;
+            stake_address = STAKE_ADDRESS_HF1;
+        }
+
+        addresses[1] = stake_address;
+        rewards[1] = stake_reward;
+
+        addresses[2] = treasury_address;
+        rewards[2] = treasury_reward;
 
         for (uint i = 0; i < beneficiaries.length; i++) {
             if (kind[i] == 0) { // author

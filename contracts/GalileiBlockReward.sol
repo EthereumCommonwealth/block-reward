@@ -37,13 +37,6 @@ contract GalileiBlockReward is BlockReward {
     uint256 constant STAKE_REWARD_HF1 = TREASURY_REWARD;
     uint256 constant HF1_BLOCK = 1000;
 
-    // Monetary policy
-    uint256[5] MP_MINER_REWARD = [0x16c4abbebea0100000, 0xcaf67003701680000, 0x7068fb1598aa00000, 0x3dd356e57a5d80000, 0x21b91820143300000];
-
-    uint256[5] MP_STAKE_REWARD = [0x68155a43676e00000, 0x1f399b1438a100000, 0x12bc29d8eec700000, 0xb3db2b55c1100000, 0x6bd495d530c90000];
-
-    uint256[5] MP_TREASURY_REWARD = [0x340aad21b3b700000, 0x4e1003b28d9280000, 0x38347d8acc5500000, 0x2757f17ac23b80000, 0x1af996539a2a60000];
-
     modifier onlySystem {
         require(msg.sender == SYSTEM_ADDRESS);
         _;
@@ -60,14 +53,14 @@ contract GalileiBlockReward is BlockReward {
 
         address[] memory addresses = new address[](3); // minimum 3 for author, ubi contract and dev contract
         uint256[] memory rewards = new uint256[](3);
-        uint256 blockPosition = getBlockPosition();
-        uint256 MINER_REWARD = getMinerReward(blockPosition);
+        uint256 blockIndex = getBlockPosition();
+        uint256 MINER_REWARD = getMinerReward(blockIndex);
 
         addresses[1] = getStakeAddress();
-        rewards[1] = getStakeReward(blockPosition);
+        rewards[1] = getStakeReward(blockIndex);
 
         addresses[2] = TREASURY_ADDRESS;
-        rewards[2] = getTreasuryReward(blockPosition);
+        rewards[2] = getTreasuryReward(blockIndex);
 
         for (uint i = 0; i < beneficiaries.length; i++) {
             if (kind[i] == 0) { // author
@@ -130,7 +123,9 @@ contract GalileiBlockReward is BlockReward {
         returns (uint256)
     {
         if (block.number > HF1_BLOCK) {
-            return MP_TREASURY_REWARD[blockPosition];
+            uint72[5] memory MP_TREASURY_REWARD = [0x340aad21b3b700000, 0x4e1003b28d9280000, 0x38347d8acc5500000, 0x2757f17ac23b80000, 0x1af996539a2a60000];
+
+            return uint256(MP_TREASURY_REWARD[blockPosition]);
         }
         return TREASURY_REWARD;
     }
@@ -141,17 +136,21 @@ contract GalileiBlockReward is BlockReward {
         returns (uint256)
     {
         if (block.number > HF1_BLOCK) {
-            return MP_STAKE_REWARD[blockPosition];
+            uint72[5] memory MP_STAKE_REWARD = [0x68155a43676e00000, 0x1f399b1438a100000, 0x12bc29d8eec700000, 0xb3db2b55c1100000, 0x6bd495d530c90000];
+
+            return uint256(MP_STAKE_REWARD[blockPosition]);
         }
         return STAKE_REWARD;
     }
 
-    function getMinerReward(uint blockPosition)
+    function getMinerReward(uint256 blockPosition)
         internal
         view
         returns (uint256)
     {
-        return MP_MINER_REWARD[blockPosition];
+        uint72[5] memory MP_MINER_REWARD = [0x16c4abbebea0100000, 0xcaf67003701680000, 0x7068fb1598aa00000, 0x3dd356e57a5d80000, 0x21b91820143300000];
+
+        return uint256(MP_MINER_REWARD[blockPosition]);
     }
 
     function getBlockPosition()

@@ -111,7 +111,7 @@ contract GalileiBlockReward is BlockReward {
         view
         returns (address)
     {
-        if (block.number > HF1_BLOCK) {
+        if (block.number >= HF1_BLOCK) {
             return STAKE_ADDRESS_HF1;
         }
         return STAKE_ADDRESS;
@@ -122,8 +122,8 @@ contract GalileiBlockReward is BlockReward {
         view
         returns (uint256)
     {
-        if (block.number > HF1_BLOCK) {
-            uint72[5] memory MP_TREASURY_REWARD = [0x340aad21b3b700000, 0x4e1003b28d9280000, 0x38347d8acc5500000, 0x2757f17ac23b80000, 0x1af996539a2a60000];
+        if (block.number >= HF1_BLOCK) {
+            uint72[5] memory MP_TREASURY_REWARD = [0x340aad21b3b700000, 0x1f399b1438a100000, 0x12bc29d8eec700000, 0xb3db2b55c1100000, 0x6bd495d530c90000];
 
             return uint256(MP_TREASURY_REWARD[blockPosition]);
         }
@@ -135,8 +135,8 @@ contract GalileiBlockReward is BlockReward {
         view
         returns (uint256)
     {
-        if (block.number > HF1_BLOCK) {
-            uint72[5] memory MP_STAKE_REWARD = [0x68155a43676e00000, 0x1f399b1438a100000, 0x12bc29d8eec700000, 0xb3db2b55c1100000, 0x6bd495d530c90000];
+        if (block.number >= HF1_BLOCK) {
+            uint72[5] memory MP_STAKE_REWARD = [0x68155a43676e00000, 0x4e1003b28d9280000, 0x38347d8acc5500000, 0x2757f17ac23b80000, 0x1af996539a2a60000];
 
             return uint256(MP_STAKE_REWARD[blockPosition]);
         }

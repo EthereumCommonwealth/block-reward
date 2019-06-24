@@ -53,14 +53,14 @@ contract CallistoBlockReward is BlockReward {
 
         address[] memory addresses = new address[](3); // minimum 3 for author, ubi contract and dev contract
         uint256[] memory rewards = new uint256[](3);
-        uint256 blockPosition = getBlockPosition();
-        uint256 MINER_REWARD = getMinerReward(blockPosition);
+        uint256 blockIndex = getBlockPosition();
+        uint256 MINER_REWARD = getMinerReward(blockIndex);
 
         addresses[1] = getStakeAddress();
-        rewards[1] = getStakeReward(blockPosition);
+        rewards[1] = getStakeReward(blockIndex);
 
         addresses[2] = TREASURY_ADDRESS;
-        rewards[2] = getTreasuryReward(blockPosition);
+        rewards[2] = getTreasuryReward(blockIndex);
 
         for (uint i = 0; i < beneficiaries.length; i++) {
             if (kind[i] == 0) { // author
